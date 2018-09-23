@@ -1,36 +1,41 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import routes from './router/router'
-import store from './store/'
-import {routerMode} from './config/env'
-import './config/rem'
-import FastClick from 'fastclick'
+import App from './App'
+import Vuex from 'vuex'
+import base from './store/vuex.js'
+import router from './router/router.js'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+//import 'vue-material/dist/theme/default-dark.css' 
 
-if ('addEventListener' in document) {
-    document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
-    }, false);
-}
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+//导入百度地图
+import BaiduMap from 'vue-baidu-map'
+//引入echarts
+import echarts from 'vue-echarts/components/ECharts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
 
-Vue.use(VueRouter)
-const router = new VueRouter({
-	routes,
-	mode: routerMode,
-	strict: process.env.NODE_ENV !== 'production',
-	scrollBehavior (to, from, savedPosition) {
-	    if (savedPosition) {
-		    return savedPosition
-		} else {
-			if (from.meta.keepAlive) {
-				from.meta.savedPosition = document.body.scrollTop;
-			}
-		    return { x: 0, y: to.meta.savedPosition || 0 }
-		}
+
+Vue.use(BaiduMap, {
+	// ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+	ak: 'amczsAgEUKG9F893UGTxkYBK2onrCWGf'
+  })
+Vue.use(Vuex)
+Vue.use(MintUI)
+Vue.use(VueMaterial);
+
+
+
+const store = new Vuex.Store({
+	modules: {
+		base: base
 	}
 })
 
 new Vue({
 	router,
 	store,
+	render: h => h(App)
 }).$mount('#app')
 
