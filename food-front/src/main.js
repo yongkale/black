@@ -24,8 +24,10 @@ Vue.use(BaiduMap, {
 Vue.use(Vuex)
 Vue.use(MintUI)
 Vue.use(VueMaterial);
+//Vue.use(VueAxios, axios)
 
-
+//Vue.prototype.$http = axios
+//console.log(axios)
 
 const store = new Vuex.Store({
 	modules: {

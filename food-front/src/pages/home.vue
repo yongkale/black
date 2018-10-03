@@ -2,12 +2,16 @@
     <div class="home main-view">
         <div class="home-top">
             <div class="home-header">
-                <span>相约</span>
+                <div style="width:20%">
+                    <router-link to="/add-action">
+                        <img style="height: 30px;" class='home-add-svg' src="./../assets/img/add.svg" alt="ff" />
+                    </router-link>
+                </div>
                 <input class="search-key" v-model="searchKey"/>
             </div>
 
             <div class="home-location" @click="changea('currentCity')">
-                <img style="height: 30px;" class='home-localtion-svg' src="./../assets/img/location.svg" alt="ff" />
+                <img style="height: 30px;" class='home-localtion-svg' src="./../assets/img/location.svg" alt="" />
                 <span>{{currentCity}}</span>
                 <span>|</span>
                 <span>遇到你想想要的,守着你所心疼的</span>
@@ -59,9 +63,12 @@
 
 <script>
 import {MP} from './map.js'
+//import api from './../constant/api'
 import { mapMutations, mapState, mapActions } from 'vuex';
-import { Hcity, Cdata } from './../assets/js/city.data'
+import { Hcity, Cdata } from './../assets/js/city.data';
 import vCity from '../components/city';
+import api from './../fetch/api.js';
+//import axios from 'axios';
 
 export default {
     data() {
@@ -74,7 +81,7 @@ export default {
 
     },
     computed: {
-        ...mapState('base', ['showCity', 'startCity', 'endCity','currentCity','showDetial'])
+        ...mapState('base', ['showCity', 'startCity', 'endCity','currentCity','showDetial']),
     },
     methods: {
         ...mapMutations('base',['changeStaticState']),
@@ -113,7 +120,13 @@ export default {
             }
             var myCity = new BMap.LocalCity();
             myCity.get(myFun); 
-        }
+        },
+/*        sendTest() {
+            api.Login()
+                .then(res => {
+                    console.log(res);
+                })
+        }*/
     },
     mounted: function() {
         this.changeStaticState({
@@ -137,6 +150,7 @@ export default {
 @import './../assets/css/style.scss';
 
 #app {
+    white-space: nowrap;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -212,7 +226,8 @@ export default {
 }
 .main-view{
     .home-header{
-    color: pink;
+        white-space: nowrap;
+        color: pink;
         padding-top: 5px;
         span{
             margin-left: 5px;
@@ -228,13 +243,21 @@ export default {
         }
         .search-key {
             display: block;
-            margin-left: 20px;
+            margin-left: 10px;
             height: 35px;
-            padding: 3px 10px;
+            padding: 3px 7px;
             float: left;
             border: 1 solid pink;
             border-radius: 62px;
             outline:none;
+            width: 80%;
+        }
+        .home-add-svg {
+            display: block;
+            float: left;
+            height: 30px;
+            margin-left: 5px;
+            margin-top: 2px;
         }
     }
     .home-top {
@@ -250,6 +273,7 @@ export default {
         clear: both;;
         float: none;
         color: pink;
+        white-space: nowrap;
     }
     .home-content {
         .msg-detail {

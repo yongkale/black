@@ -27,7 +27,10 @@ module.exports = {
         context: [ //代理路径
             '/shopping',
         ],
-        proxypath: 'localhost:8080',
+        proxyTable: {
+            //target: ''
+            target: 'http://localhost:8080'
+        },
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)
