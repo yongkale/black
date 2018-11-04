@@ -358,9 +358,15 @@ export default {
             list-style:none;
             color: pink;
             padding: 0;
+            display: block;
+            width: 90%;
+            height: 53px;
+            margin-bottom: 0;
+            margin: 0;
+            margin: 0 auto;
             li {
                 float: left;
-                margin: 0 25px;
+                margin-left: 13%;
                 img {
                     max-width: 30px; 
                 }
