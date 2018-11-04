@@ -1,22 +1,13 @@
 import axios from 'axios'
 
 // api 路径
-const HOST = 'http://localhost:8080'
+const HOST = 'http://192.168.0.118:8080'
 
-export function fetch(url, method = 'GET', data) {
+export function fetch(url, method = 'GET', data = {}) {
     return new Promise((resolve, reject) => {
-        // axios.get(HOST + url)
-        //     .then(response => {
-        //       resolve(response.data);
-        //     })
-        //     .catch((error) => {
-        //        reject(error)
-        //     })
         var user = {
             name: 12345
         }
-        console.log ('api2')
-        console.log (data)
         axios({
                 headers: {'Content-Type': 'application/json;charset=UTF-8'},
                 method: method,
@@ -45,14 +36,36 @@ export default {
     },
 
     /**
+     * 获取骑牛token
+     */
+    getUpToken() {
+        return fetch('/apiqiniu/getQiNiuToken')
+    },
+
+    /**
      * 发布活动
      * @param  data 
      * @returns
      */
     submitAction(data) {
-        console.log ('api')
-        console.log (data)
         return fetch('/apiaction/add', 'POST', data)
+    },
+
+    /**
+     * 查询所有的活动
+     * @returns
+     */
+    findAllAction() {
+        return fetch('/apiaction/list')
+    },
+
+    /**
+     * 查询一个活动活动
+     * @param  data 
+     * @returns
+     */
+    findAction(data) {
+        return fetch('/apiaction/find?id=' + data)
     },
 
     /**

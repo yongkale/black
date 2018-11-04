@@ -13,6 +13,33 @@ public class DateAction {
     private Date crateTime;
     private Date updateTime;
     private Boolean isDelete;
+    private String dateActionImg;
+    private String dateActionHost;
+    private String dateActionRatio;
+
+    public void setDateActionImg(String dateActionImg) {
+        this.dateActionImg = dateActionImg;
+    }
+
+    public void setDateActionHost(String dateActionHost) {
+        this.dateActionHost = dateActionHost;
+    }
+
+    public void setDateActionRatio(String dateActionRatio) {
+        this.dateActionRatio = dateActionRatio;
+    }
+
+    public String getDateActionImg() {
+        return dateActionImg;
+    }
+
+    public String getDateActionHost() {
+        return dateActionHost;
+    }
+
+    public String getDateActionRatio() {
+        return dateActionRatio;
+    }
 
     public void setId(String id) {
         this.id = id;

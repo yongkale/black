@@ -8,33 +8,69 @@
         </mt-header>
     </div>
     <div>
-        <img class="action-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538291894&di=9ea7a29ed5ffa06b84081eec13dcca64&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2Fbba1cd11728b47104def00f0c8cec3fdfd0323ce.jpg">
+        
+        <img class="action-img" :src="qiniu.qiniu + '/' + dateAction.dateActionImg">
         <div class="action-theme">
             <ul>
-                <li>活动主题:</li>
-                <li>活动介绍:</li>
-                <li>活动举办方:</li>
+                <li>活动主题: {{dateAction.theme}}</li>
+                <li>人均消费: {{dateAction.consumption}}</li>
+                <li>开始时间: {{dateAction.time | formatDate}}</li>
+                <li>活动介绍: {{dateAction.introduction}}</li>
+                <li>活动举办方: {{dateAction.theme}}</li>
             </ul>
         </div>
     </div>
     <div id="peopleCount" class="people-count"></div>
     <div id="peopleRatio" class="people-ratio"></div>
+    <div class="submit-action-div" @click="joinAction"> 
+        <el-button class="submit-action-btn" type="danger">我要参加</el-button>
+    </div>
 </div>
 </template>
 
 <script>
 var echarts = require('echarts');
+import { Toast } from 'mint-ui';
+import qiniu from './../config/qiniu.json'
+import api from './../fetch/api.js';
+import { formatDate } from './../components/date.js';
 
 export default {
+    filters: {                    //时间转换
+        formatDate(time) {
+            var date = new Date(time);
+            return formatDate(date, 'yyyy年MM月dd日 hh时mm分');
+        }
+    },
+  props: ['id'],
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      qiniu: qiniu,
+      dateAction: {}
     }
   },
   mounted() {
     this.drawLine();
+    this.init();
   },
   methods: {
+    init() {
+         api.findAction(this.$route.query.id).then(res => {
+            this.dateAction = res.data.data;
+         })
+    },
+    //参加活动
+    joinAction() {
+        //TODO
+        Toast({
+            message: '参加成功',
+            position: 'middle',
+            duration: 5000,
+            iconClass: 'icon-tip'
+        });
+    }
+    ,
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let peopleCount = echarts.init(document.getElementById('peopleCount'))
@@ -80,7 +116,7 @@ export default {
                 },
             },
             calculable : true,
-            series : [
+            series :[
                 {
                     name:'男女比率',
                     type:'pie',
@@ -139,6 +175,16 @@ export default {
                 color: pink;
                 font-size: 15px;
                 margin: 5px;
+            }
+        }
+        .submit-action-div {
+            margin: 0 auto;
+            width: 90%;
+            .submit-action-btn {
+                width: 100%;
+            }
+            .el-button--danger {
+                margin: 10px 0px;
             }
         }
     }

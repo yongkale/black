@@ -142,6 +142,7 @@ section {
         margin-top: 20px;
     }
     .mint-searchbar {
+        width: 95%;
         background: #fff;
         .mint-searchbar-inner {
             border-radius: 62px;
@@ -249,6 +250,9 @@ section {
         position: relative;
         left: 101px;
         top: -26px;
+    }
+    .mint-searchbar-core {
+        margin-left: 5px;
     }
 }
 </style>

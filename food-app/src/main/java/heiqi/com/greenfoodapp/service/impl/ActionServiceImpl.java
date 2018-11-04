@@ -7,15 +7,22 @@ import heiqi.com.greenfoodapp.service.ActionSerivce;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class ActionServiceImpl implements ActionSerivce {
     private static final Logger logger = LoggerFactory.getLogger(ActionServiceImpl.class);
 
     @Autowired
     private ActionDao actionDao;
+
+    public ActionServiceImpl(ActionDao actionDao) {
+        this.actionDao = actionDao;
+    }
 
     @Override
     public Map<String, Object> add(DateAction action) {
@@ -41,6 +48,22 @@ public class ActionServiceImpl implements ActionSerivce {
         try {
             results.put(Constant.RESULT_STATUS_MSG, Constant.RESULT_STATUS_SUCCESS);
             results.put(Constant.RESULT_DATA_MSG, actionDao.getList());
+        } catch (Exception e) {
+            results.put(Constant.RESULT_STATUS_MSG, Constant.RESULT_STATUS_FAILED);
+            results.put(Constant.RESULT_DATA_MSG, "查询失败");
+            logger.info(e.getMessage());
+        }
+
+        return results;
+    }
+
+    @Override
+    public Map<String, Object> find(String id) {
+        Map<String, Object> results = new HashMap<String, Object>();
+        try {
+            DateAction dateAction = actionDao.find(id);
+            results.put(Constant.RESULT_STATUS_MSG, Constant.RESULT_STATUS_SUCCESS);
+            results.put(Constant.RESULT_DATA_MSG, dateAction);
         } catch (Exception e) {
             results.put(Constant.RESULT_STATUS_MSG, Constant.RESULT_STATUS_FAILED);
             results.put(Constant.RESULT_DATA_MSG, "查询失败");

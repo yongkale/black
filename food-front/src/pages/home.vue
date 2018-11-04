@@ -2,37 +2,55 @@
     <div class="home main-view">
         <div class="home-top">
             <div class="home-header">
-                <div style="width:20%">
-                    <router-link to="/add-action">
-                        <img style="height: 30px;" class='home-add-svg' src="./../assets/img/add.svg" alt="ff" />
-                    </router-link>
-                </div>
                 <input class="search-key" v-model="searchKey"/>
+                <div class="clear-block"></div>
+                <div class="block">
+                    <el-carousel height="150px">
+                    <el-carousel-item v-for="(img,index) in imgs" :key="index">
+                        <img :src="img.url"/>
+                    </el-carousel-item>
+                    </el-carousel>
+                </div>
             </div>
-
             <div class="home-location" @click="changea('currentCity')">
                 <img style="height: 30px;" class='home-localtion-svg' src="./../assets/img/location.svg" alt="" />
                 <span>{{currentCity}}</span>
                 <span>|</span>
-                <span>遇到你想想要的,守着你所心疼的</span>
+                <span>遇到你想要的,守着你所心疼的</span>
             </div>
         </div>
 
+        <div class="home-menu">
+            <ul>
+                <li v-for="item in 4" :key="item">
+                <!--添加-->
+                <div style="width:25%">
+                    <router-link to="/add-action">
+                        <img style="height: 30px;" class='home-add-svg' src="./../assets/img/add.svg" alt="ff" />
+                    </router-link>
+                </div>
+                <div>添加</div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="clear: both"></div>
+
         <div class="home-content">
-            <md-list class="md-triple-line">
-                 <router-link to="/detail" class="msg-detail">
+            <md-list class="md-triple-line" v-for="(dateAction, index) in dateActions" :key="index">
+                 <router-link :to="{path:'/detail',query:{id:dateAction.id}}" class="msg-detail">
                     <md-list-item class="home-md-list-item">
                         <md-avatar>
-                            <img src="https://placeimg.com/40/40/people/1" alt="People">
+                            <img :src="qiniu.qiniu + '/' + dateAction.dateActionImg" alt="People">
                         </md-avatar>
-
                         <div class="md-list-item-text">
-                            <span class="home-theme">{{'主题'}}({{'举办方'}})</span>
+                            <span class="home-theme">{{dateAction.theme}}({{'举办方'}})</span>
                             <span>
-                                <span>人均 : {{'80'}}</span>
+                                
+                                <span>人均 : {{dateAction.consumption}}</span>
                             </span>
                             <span>
-                                <span>活动 : {{'活动'}}</span>
+                                <span>活动 : {{dateAction.introduction}}</span>
                             </span>
                         </div>
                         <div class="home-number">
@@ -63,12 +81,12 @@
 
 <script>
 import {MP} from './map.js'
-//import api from './../constant/api'
 import { mapMutations, mapState, mapActions } from 'vuex';
 import { Hcity, Cdata } from './../assets/js/city.data';
 import vCity from '../components/city';
 import api from './../fetch/api.js';
-//import axios from 'axios';
+import qiniu from './../config/qiniu.json';
+import { Toast } from 'mint-ui';
 
 export default {
     data() {
@@ -77,6 +95,14 @@ export default {
             Hcity,
             Cdata,
             Tcity: '',
+            dateActions: {},
+            qiniu: qiniu,
+            imgs: [
+                {url:require('./../assets/img/1.jpeg')},
+                {url:require('./../assets/img/2.jpeg')},
+                {url:require('./../assets/img/3.jpeg')},
+                {url:require('./../assets/img/4.jpeg')},
+            ]
         }
 
     },
@@ -104,29 +130,37 @@ export default {
             })
         },
         locationCity() {
-            var vm = this;
-            var map = new BMap.Map("allmap");
-            var point = new BMap.Point(116.331398,39.897445);
-            map.centerAndZoom(point,12);
+            var vm = this
+            var map = new BMap.Map("allmap")
+            var point = new BMap.Point(116.331398,39.897445)
+            map.centerAndZoom(point,12)
 
             function myFun(result){
-                var cityName = result.name;
-                map.setCenter(cityName);
+                var cityName = result.name
+                map.setCenter(cityName)
 
                 vm.changeStaticState({
                     name:'currentCity',
                     newVal: cityName
                 })
             }
-            var myCity = new BMap.LocalCity();
-            myCity.get(myFun); 
+            var myCity = new BMap.LocalCity()
+            myCity.get(myFun)
         },
-/*        sendTest() {
-            api.Login()
-                .then(res => {
-                    console.log(res);
-                })
-        }*/
+        findAll() {
+            api.findAllAction().then(res => {
+                if (res.data.status == 0) {
+                    this.dateActions = res.data.data
+                } else {
+                    Toast({
+                        message: '暂时没有发布信息',
+                        position: 'middle',
+                        duration: 5000,
+                        iconClass: 'icon-tip'
+                    });
+                }
+            })
+        }
     },
     mounted: function() {
         this.changeStaticState({
@@ -137,7 +171,8 @@ export default {
             MP('amczsAgEUKG9F893UGTxkYBK2onrCWGf').then(BMap => {
                 this.locationCity();
             })
-        })
+        }),
+        this.findAll();
     },
     components: {
         vCity
@@ -224,11 +259,28 @@ export default {
     margin-left: 5px;
     width: 20px;
 }
-.main-view{
+.main-view{ 
+  .clear-block {
+      clear: both;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
     .home-header{
         white-space: nowrap;
         color: pink;
-        padding-top: 5px;
         span{
             margin-left: 5px;
             display: block;
@@ -243,14 +295,21 @@ export default {
         }
         .search-key {
             display: block;
-            margin-left: 10px;
-            height: 35px;
-            padding: 3px 7px;
-            float: left;
+            height: 26px;
+            padding: 2px 15px;
+            padding-bottom: 4px;
             border: 1 solid pink;
             border-radius: 62px;
             outline:none;
-            width: 80%;
+            z-index: 9999;
+            position: absolute;
+            filter: alpha(opacity=50);
+            -moz-opacity: .5;
+            opacity: .5;
+            color: black;
+            right: 5%;
+            top: 5px;
+            width: 90%;
         }
         .home-add-svg {
             display: block;
@@ -292,6 +351,20 @@ export default {
         .home-love {
             width: 15px;
             height: 15px;;
+        }
+    }
+    .home-menu {
+        ul {
+            list-style:none;
+            color: pink;
+            padding: 0;
+            li {
+                float: left;
+                margin: 0 25px;
+                img {
+                    max-width: 30px; 
+                }
+            }
         }
     }
 }

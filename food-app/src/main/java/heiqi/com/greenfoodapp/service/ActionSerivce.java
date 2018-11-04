@@ -8,4 +8,6 @@ public interface ActionSerivce {
     public Map<String, Object> add(DateAction action);
 
     public Map<String,Object> list();
+
+    public Map<String,Object> find(String id);
 }

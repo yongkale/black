@@ -7,6 +7,10 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 //import 'vue-material/dist/theme/default-dark.css' 
 
+//引入ele UI
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 //导入百度地图
@@ -25,6 +29,8 @@ Vue.use(Vuex)
 Vue.use(MintUI)
 Vue.use(VueMaterial);
 //Vue.use(VueAxios, axios)
+
+Vue.use(ElementUI);
 
 //Vue.prototype.$http = axios
 //console.log(axios)

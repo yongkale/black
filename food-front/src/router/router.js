@@ -17,7 +17,8 @@ let routes = [{
     {
         path: '/detail',
         name: 'Detail',
-        component: Detail
+        component: Detail,
+        props: true 
     },
     {
         path: '/add-action',
